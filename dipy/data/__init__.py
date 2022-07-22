@@ -52,9 +52,7 @@ from dipy.data.fetcher import (get_fnames,
                                fetch_resdnn_weights,
                                fetch_synb0_weights,
                                fetch_synb0_test,
-                               read_qte_lte_pte,
-                               read_DiB_70_lte_pte_ste,
-                               read_DiB_217_lte_pte_ste)
+                               read_qte_lte_pte)
 
 from ..utils.arrfuncs import as_native_array
 from dipy.io.image import load_nifti
