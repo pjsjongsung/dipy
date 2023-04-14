@@ -334,3 +334,50 @@ class LabelsBundlesFlow(Workflow):
             new_sft = StatefulTractogram(bundle, sft, Space.RASMM)
             save_tractogram(new_sft, out_bundle, bbox_valid_check=False)
             logging.info(out_bundle)
+
+class EVACPlusFlow(Workflow):
+    @classmethod
+    def get_short_name(cls):
+        return 'evacplus'
+
+    def run(self, nifti_files,
+            out_dir='',
+            out_mask='brain_mask.nii.gz'):
+        """ Extract brain using EVAC+
+
+        Parameters
+        ----------
+        nifti_files : string
+            The path of T1 files where you want to extract the brain
+        out_dir : string, optional
+            Output directory. (default current directory)
+        out_mask : string, optional
+            Segmented brain mask
+
+        References
+        ----------
+        .. [Park22] Park, Jong Sung et al. “EVAC+: Multi-scale V-net
+        with Deep Feature CRF Layers for Brain Extraction.” (2022).
+
+        """
+        logging.info('### Brain Extraction using EVAC+ ###')
+
+        io_it = self.get_io_iterator()
+        for f_steamlines, f_labels, out_bundle in io_it:
+
+            logging.info(f_steamlines)
+            sft = load_tractogram(f_steamlines, 'same',
+                                  bbox_valid_check=False)
+            streamlines = sft.streamlines
+
+            logging.info(f_labels)
+            location = np.load(f_labels)
+            if len(location) < 1 :
+                bundle = Streamlines([])
+            else:
+                bundle = streamlines[location]
+
+            logging.info('Saving output files ...')
+            new_sft = StatefulTractogram(bundle, sft, Space.RASMM)
+            save_tractogram(new_sft, out_bundle, bbox_valid_check=False)
+            logging.info(out_bundle)
