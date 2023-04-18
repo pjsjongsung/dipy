@@ -102,3 +102,36 @@ def test_recobundles_flow():
         bmd_value = BMD.distance(x0.tolist())
 
         npt.assert_equal(bmd_value < 1, True)
+
+def test_evac_plus_flow():
+    with TemporaryDirectory() as out_dir:
+        data_path, _, _ = get_fnames('small_25')
+        volume = load_nifti_data(data_path)
+        save_masked = True
+        median_radius = 3
+        numpass = 3
+        autocrop = False
+        vol_idx = [0]
+        dilate = 0
+
+        mo_flow = MedianOtsuFlow()
+        mo_flow.run(data_path, out_dir=out_dir, save_masked=save_masked,
+                    median_radius=median_radius, numpass=numpass,
+                    autocrop=autocrop, vol_idx=vol_idx, dilate=dilate)
+
+        mask_name = mo_flow.last_generated_outputs['out_mask']
+        masked_name = mo_flow.last_generated_outputs['out_masked']
+
+        masked, mask = median_otsu(volume,
+                                   vol_idx=vol_idx,
+                                   median_radius=median_radius,
+                                   numpass=numpass,
+                                   autocrop=autocrop, dilate=dilate)
+
+        result_mask_data = load_nifti_data(pjoin(out_dir, mask_name))
+        npt.assert_array_equal(result_mask_data.astype(np.uint8), mask)
+
+        result_masked = nib.load(pjoin(out_dir, masked_name))
+        result_masked_data = np.asanyarray(result_masked.dataobj)
+
+        npt.assert_array_equal(np.round(result_masked_data), masked)
