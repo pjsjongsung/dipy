@@ -86,5 +86,5 @@ def set_random_seed(func):
         np.random.seed(0)
         output = func(*args, **kwargs)
         return output
-    
+
     return test_with_seed

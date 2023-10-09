@@ -53,15 +53,15 @@ def create_square_gauss():
     square_gauss = add_noise(square_gauss, 10000, 1, noise_type='gaussian')
     square_gauss[42:213, 42:213, :] = 1
     noise_1 = np.random.normal(1.001, 0.0001,
-                            size=square_gauss[42:213, 42:213, :].shape)
+                               size=square_gauss[42:213, 42:213, :].shape)
     square_gauss[42:213, 42:213, :] = square_gauss[42:213, 42:213, :] + noise_1
     square_gauss[71:185, 71:185, :] = 2
     noise_2 = np.random.normal(2.001, 0.0001,
-                            size=square_gauss[71:185, 71:185, :].shape)
+                               size=square_gauss[71:185, 71:185, :].shape)
     square_gauss[71:185, 71:185, :] = square_gauss[71:185, 71:185, :] + noise_2
     square_gauss[99:157, 99:157, :] = 3
     noise_3 = np.random.normal(3.001, 0.0001,
-                            size=square_gauss[99:157, 99:157, :].shape)
+                               size=square_gauss[99:157, 99:157, :].shape)
     square_gauss[99:157, 99:157, :] = square_gauss[99:157, 99:157, :] + noise_3
 
     return square_gauss
