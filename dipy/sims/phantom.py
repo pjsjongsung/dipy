@@ -89,7 +89,8 @@ def orbital_phantom(gtab=None,
                     angles=np.linspace(0, 2 * np.pi, 32),
                     radii=np.linspace(0.2, 2, 6),
                     S0=100.,
-                    snr=None):
+                    snr=None,
+                    rng=None):
     """Create a phantom based on a 3-D orbit ``f(t) -> (x,y,z)``.
 
     Parameters
@@ -121,6 +122,8 @@ def orbital_phantom(gtab=None,
     snr : float, optional
         The signal to noise ratio set to apply Rician noise to the data.
         Default is to not add noise at all.
+    rng : numpy.random.Generator class, optional
+        Numpy's random generator for setting seed values when needed.
 
     Returns
     -------
@@ -190,7 +193,7 @@ def orbital_phantom(gtab=None,
     vol *= S0
 
     if snr is not None:
-        vol = add_noise(vol, snr, S0=S0, noise_type='rician')
+        vol = add_noise(vol, snr, S0=S0, noise_type='rician', rng=rng)
 
     return vol
 

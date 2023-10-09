@@ -54,7 +54,7 @@ def test_phantom():
 
 
 def test_add_noise():
-    np.random.seed(1980)
+    rng = np.random.default_rng(1980)
 
     N = 50
     S0 = 100
@@ -66,7 +66,8 @@ def test_add_noise():
                    scale=(3, 3, 3),
                    angles=np.linspace(0, 2 * np.pi, 16),
                    radii=np.linspace(0.2, 2, 6),
-                   S0=S0)
+                   S0=S0,
+                   rng=rng)
 
     vol = orbital_phantom(gtab, **options)
 

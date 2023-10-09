@@ -68,12 +68,12 @@ def test_scale_space():
 
 
 def test_scale_space_exceptions():
-    np.random.seed(2022966)
+    rng = np.random.default_rng(2022966)
     target_shape = (32, 32)
     # create a random image
     image = np.ndarray(target_shape, dtype=floating)
     ns = np.size(image)
-    image[...] = np.random.randint(0, 10, ns).reshape(tuple(target_shape))
+    image[...] = rng.integers(0, 10, ns).reshape(tuple(target_shape))
     zeros = (image == 0).astype(np.int32)
 
     ss = ScaleSpace(image, 3)

@@ -65,11 +65,11 @@ def test_trilinear_interpolate():
 
 
 def test_interpolate_scalar_2d():
-    np.random.seed(5324989)
+    rng = np.random.default_rng(5324989)
     sz = 64
     target_shape = (sz, sz)
     image = np.empty(target_shape, dtype=floating)
-    image[...] = np.random.randint(0, 10, np.size(image)).reshape(target_shape)
+    image[...] = rng.integers(0, 10, np.size(image)).reshape(target_shape)
 
     extended_image = np.zeros((sz + 2, sz + 2), dtype=floating)
     extended_image[1:sz + 1, 1:sz + 1] = image[...]
@@ -77,7 +77,7 @@ def test_interpolate_scalar_2d():
     # Select some coordinates inside the image to interpolate at
     nsamples = 200
     locations =\
-        np.random.ranf(2 * nsamples).reshape((nsamples, 2)) * (sz + 2) - 1.0
+        rng.random(2 * nsamples).reshape((nsamples, 2)) * (sz + 2) - 1.0
     extended_locations = locations + 1.0  # shift coordinates one voxel
 
     # Call the implementation under test
@@ -93,9 +93,9 @@ def test_interpolate_scalar_2d():
     epsilon = 5e-8
     for k in range(2):
         for offset in [0, sz - 1]:
-            delta = ((np.random.ranf(nsamples) * 2) - 1) * epsilon
+            delta = ((rng.random(nsamples) * 2) - 1) * epsilon
             locations[:, k] = delta + offset
-            locations[:, (k + 1) % 2] = np.random.ranf(nsamples) * (sz - 1)
+            locations[:, (k + 1) % 2] = rng.random(nsamples) * (sz - 1)
             interp, inside = interpolate_scalar_2d(image, locations)
 
             locations[:, k] = offset
@@ -109,15 +109,15 @@ def test_interpolate_scalar_2d():
 
 
 def test_interpolate_scalar_nn_2d():
-    np.random.seed(1924781)
+    rng = np.random.default_rng(1924781)
     sz = 64
     target_shape = (sz, sz)
     image = np.empty(target_shape, dtype=floating)
-    image[...] = np.random.randint(0, 10, np.size(image)).reshape(target_shape)
+    image[...] = rng.integers(0, 10, np.size(image)).reshape(target_shape)
     # Select some coordinates to interpolate at
     nsamples = 200
     locations =\
-        np.random.ranf(2 * nsamples).reshape((nsamples, 2)) * (sz + 2) - 1.0
+        rng.random(2 * nsamples).reshape((nsamples, 2)) * (sz + 2) - 1.0
 
     # Call the implementation under test
     interp, inside = interpolate_scalar_nn_2d(image, locations)
@@ -137,15 +137,15 @@ def test_interpolate_scalar_nn_2d():
 
 
 def test_interpolate_scalar_nn_3d():
-    np.random.seed(3121121)
+    rng = np.random.default_rng(3121121)
     sz = 64
     target_shape = (sz, sz, sz)
     image = np.empty(target_shape, dtype=floating)
-    image[...] = np.random.randint(0, 10, np.size(image)).reshape(target_shape)
+    image[...] = rng.integers(0, 10, np.size(image)).reshape(target_shape)
     # Select some coordinates to interpolate at
     nsamples = 200
     locations =\
-        np.random.ranf(3 * nsamples).reshape((nsamples, 3)) * (sz + 2) - 1.0
+        rng.random(3 * nsamples).reshape((nsamples, 3)) * (sz + 2) - 1.0
 
     # Call the implementation under test
     interp, inside = interpolate_scalar_nn_3d(image, locations)
@@ -166,11 +166,11 @@ def test_interpolate_scalar_nn_3d():
 
 
 def test_interpolate_scalar_3d():
-    np.random.seed(9216326)
+    rng = np.random.default_rng(9216326)
     sz = 64
     target_shape = (sz, sz, sz)
     image = np.empty(target_shape, dtype=floating)
-    image[...] = np.random.randint(0, 10, np.size(image)).reshape(target_shape)
+    image[...] = rng.integers(0, 10, np.size(image)).reshape(target_shape)
 
     extended_image = np.zeros((sz + 2, sz + 2, sz + 2), dtype=floating)
     extended_image[1:sz + 1, 1:sz + 1, 1:sz + 1] = image[...]
@@ -178,7 +178,7 @@ def test_interpolate_scalar_3d():
     # Select some coordinates inside the image to interpolate at
     nsamples = 800
     locations =\
-        np.random.ranf(3 * nsamples).reshape((nsamples, 3)) * (sz + 2) - 1.0
+        rng.random(3 * nsamples).reshape((nsamples, 3)) * (sz + 2) - 1.0
     extended_locations = locations + 1.0  # shift coordinates one voxel
 
     # Call the implementation under test
@@ -194,10 +194,10 @@ def test_interpolate_scalar_3d():
     epsilon = 5e-8
     for k in range(3):
         for offset in [0, sz - 1]:
-            delta = ((np.random.ranf(nsamples) * 2) - 1) * epsilon
+            delta = ((rng.random(nsamples) * 2) - 1) * epsilon
             locations[:, k] = delta + offset
-            locations[:, (k + 1) % 3] = np.random.ranf(nsamples) * (sz - 1)
-            locations[:, (k + 2) % 3] = np.random.ranf(nsamples) * (sz - 1)
+            locations[:, (k + 1) % 3] = rng.random(nsamples) * (sz - 1)
+            locations[:, (k + 2) % 3] = rng.random(nsamples) * (sz - 1)
             interp, inside = interpolate_scalar_3d(image, locations)
 
             locations[:, k] = offset
@@ -212,19 +212,19 @@ def test_interpolate_scalar_3d():
 
 
 def test_interpolate_vector_3d():
-    np.random.seed(7711219)
+    rng = np.random.default_rng(7711219)
     sz = 64
     target_shape = (sz, sz, sz)
     field = np.empty(target_shape + (3,), dtype=floating)
     field[...] =\
-        np.random.randint(0, 10, np.size(field)).reshape(target_shape + (3,))
+        rng.integers(0, 10, np.size(field)).reshape(target_shape + (3,))
 
     extended_field = np.zeros((sz + 2, sz + 2, sz + 2, 3), dtype=floating)
     extended_field[1:sz + 1, 1:sz + 1, 1:sz + 1] = field
     # Select some coordinates to interpolate at
     nsamples = 800
     locations =\
-        np.random.ranf(3 * nsamples).reshape((nsamples, 3)) * (sz + 2) - 1.0
+        rng.random(3 * nsamples).reshape((nsamples, 3)) * (sz + 2) - 1.0
     extended_locations = locations + 1
 
     # Call the implementation under test
@@ -243,10 +243,10 @@ def test_interpolate_vector_3d():
     epsilon = 5e-8
     for k in range(3):
         for offset in [0, sz - 1]:
-            delta = ((np.random.ranf(nsamples) * 2) - 1) * epsilon
+            delta = ((rng.random(nsamples) * 2) - 1) * epsilon
             locations[:, k] = delta + offset
-            locations[:, (k + 1) % 3] = np.random.ranf(nsamples) * (sz - 1)
-            locations[:, (k + 2) % 3] = np.random.ranf(nsamples) * (sz - 1)
+            locations[:, (k + 1) % 3] = rng.random(nsamples) * (sz - 1)
+            locations[:, (k + 2) % 3] = rng.random(nsamples) * (sz - 1)
             interp, inside = interpolate_vector_3d(field, locations)
 
             locations[:, k] = offset
@@ -264,18 +264,18 @@ def test_interpolate_vector_3d():
 
 
 def test_interpolate_vector_2d():
-    np.random.seed(1271244)
+    rng = np.random.default_rng(1271244)
     sz = 64
     target_shape = (sz, sz)
     field = np.empty(target_shape + (2,), dtype=floating)
     field[...] =\
-        np.random.randint(0, 10, np.size(field)).reshape(target_shape + (2,))
+        rng.integers(0, 10, np.size(field)).reshape(target_shape + (2,))
     extended_field = np.zeros((sz + 2, sz + 2, 2), dtype=floating)
     extended_field[1:sz + 1, 1:sz + 1] = field
     # Select some coordinates to interpolate at
     nsamples = 200
     locations =\
-        np.random.ranf(2 * nsamples).reshape((nsamples, 2)) * (sz + 2) - 1.0
+        rng.random(2 * nsamples).reshape((nsamples, 2)) * (sz + 2) - 1.0
     extended_locations = locations + 1
 
     # Call the implementation under test
@@ -294,9 +294,9 @@ def test_interpolate_vector_2d():
     epsilon = 5e-8
     for k in range(2):
         for offset in [0, sz - 1]:
-            delta = ((np.random.ranf(nsamples) * 2) - 1) * epsilon
+            delta = ((rng.random(nsamples) * 2) - 1) * epsilon
             locations[:, k] = delta + offset
-            locations[:, (k + 1) % 2] = np.random.ranf(nsamples) * (sz - 1)
+            locations[:, (k + 1) % 2] = rng.random(nsamples) * (sz - 1)
             interp, inside = interpolate_vector_2d(field, locations)
 
             locations[:, k] = offset

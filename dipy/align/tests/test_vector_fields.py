@@ -15,7 +15,7 @@ from dipy.align.parzenhist import sample_domain_regular
 
 
 def test_random_displacement_field_2d():
-    np.random.seed(3921116)
+    rng = np.random.default_rng(3921116)
     from_shape = (25, 32)
     to_shape = (33, 29)
 
@@ -86,7 +86,7 @@ def test_random_displacement_field_2d():
 
 
 def test_random_displacement_field_3d():
-    np.random.seed(7127562)
+    rng = np.random.default_rng(7127562)
     from_shape = (25, 32, 31)
     to_shape = (33, 29, 35)
 
@@ -679,7 +679,7 @@ def test_compose_vector_fields_2d():
     composition, although operating in physical space, map the points exactly
     (up to numerical precision).
     """
-    np.random.seed(8315759)
+    rng = np.random.default_rng(8315759)
     input_shape = (10, 10)
     tgt_sh = (10, 10)
     # create a simple affine transformation
@@ -809,7 +809,7 @@ def test_compose_vector_fields_3d():
     composition, although operating in physical space, map the points exactly
     (up to numerical precision).
     """
-    np.random.seed(8315759)
+    rng = np.random.default_rng(8315759)
     input_shape = (10, 10, 10)
     tgt_sh = (10, 10, 10)
     # create a simple affine transformation
@@ -1097,7 +1097,7 @@ def test_resample_vector_field_3d():
 
 
 def test_downsample_scalar_field_2d():
-    np.random.seed(8315759)
+    rng = np.random.default_rng(8315759)
     size = 32
     sh = (size, size)
     for reduce_r in [True, False]:
@@ -1129,7 +1129,7 @@ def test_downsample_scalar_field_2d():
 
 
 def test_downsample_displacement_field_2d():
-    np.random.seed(2115556)
+    rng = np.random.default_rng(2115556)
     size = 32
     sh = (size, size, 2)
     for reduce_r in [True, False]:
@@ -1161,7 +1161,7 @@ def test_downsample_displacement_field_2d():
 
 
 def test_downsample_scalar_field_3d():
-    np.random.seed(8315759)
+    rng = np.random.default_rng(8315759)
     size = 32
     sh = (size, size, size)
     for reduce_s in [True, False]:
@@ -1204,7 +1204,7 @@ def test_downsample_scalar_field_3d():
 
 
 def test_downsample_displacement_field_3d():
-    np.random.seed(8315759)
+    rng = np.random.default_rng(8315759)
     size = 32
     sh = (size, size, size, 3)
     for reduce_s in [True, False]:
@@ -1311,7 +1311,7 @@ def test_reorient_vector_field_3d():
 
 
 def test_reorient_random_vector_fields():
-    np.random.seed(1134781)
+    rng = np.random.default_rng(1134781)
     # Test reorienting vector field
     for n_dims, func in ((2, vfu.reorient_vector_field_2d),
                          (3, vfu.reorient_vector_field_3d)):
@@ -1335,7 +1335,7 @@ def test_reorient_random_vector_fields():
 
 
 def test_gradient_2d():
-    np.random.seed(3921116)
+    rng = np.random.default_rng(3921116)
     sh = (25, 32)
     # Create grid coordinates
     x_0 = np.asarray(range(sh[0]))
@@ -1408,7 +1408,7 @@ def test_gradient_2d():
 
 
 def test_gradient_3d():
-    np.random.seed(3921116)
+    rng = np.random.default_rng(3921116)
     shape = (25, 32, 15)
     # Create grid coordinates
     x_0 = np.asarray(range(shape[0]))

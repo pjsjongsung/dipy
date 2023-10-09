@@ -133,8 +133,8 @@ def test_horizon():
 
 @pytest.mark.skipif(skip_it or not has_fury, reason="Needs xvfb")
 def test_roi_images():
-    np.random.seed(42)
-    img1 = np.random.rand(5, 5, 5)
+    rng = np.random.default_rng(42)
+    img1 = rng.random((5, 5, 5))
     img2 = np.zeros((5, 5, 5))
     img2[2, 2, 2] = 1
     img3 = np.zeros((5, 5, 5))

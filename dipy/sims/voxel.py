@@ -88,8 +88,8 @@ def add_noise(signal, snr, S0, noise_type='rician', rng=None):
         The distribution of noise added. Can be either 'gaussian' for Gaussian
         distributed noise, 'rician' for Rice-distributed noise (default) or
         'rayleigh' for a Rayleigh distribution.
-    rng : numpy.random.Generator class
-        Numpy's random generator for setting seed values when needed
+    rng : numpy.random.Generator class, optional
+        Numpy's random generator for setting seed values when needed.
 
     Returns
     -------

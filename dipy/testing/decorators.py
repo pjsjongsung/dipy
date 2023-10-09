@@ -81,10 +81,10 @@ def fix_random_number_generator(func):
     This will make the tests that use random functions reproducible.
 
     """
-    def wrapper_with_fixed_seed(*args, **kwargs):
+    def fix_random_number_gen_wrapper(*args, **kwargs):
         rng = np.random.default_rng(1234)
         kwargs['rng'] = rng
         output = func(*args, **kwargs)
         return output
 
-    return wrapper_with_fixed_seed
+    return fix_random_number_gen_wrapper

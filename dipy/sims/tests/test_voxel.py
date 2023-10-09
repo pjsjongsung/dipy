@@ -131,7 +131,7 @@ def test_multi_tensor():
 
 
 def test_snr():
-    np.random.seed(1978)
+    rng = np.random.default_rng(1978)
 
     s = single_tensor(gtab)
 
@@ -139,7 +139,7 @@ def test_snr():
     for snr in [5, 10, 20]:
         sigma = 1.0 / snr
         for j in range(1000):
-            s_noise = add_noise(s, snr, 1, noise_type='rician')
+            s_noise = add_noise(s, snr, 1, noise_type='rician', rng=rng)
 
         assert_array_almost_equal(np.var(s_noise - s), sigma ** 2, decimal=2)
 

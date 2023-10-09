@@ -58,8 +58,8 @@ def test_compute_em_demons_step_2d():
     sigma_i_sq = (F - G)**2
 
     # Select some pixels to have special values
-    np.random.seed(1346491)
-    random_labels = np.random.randint(0, 5, sh[0] * sh[1])
+    rng = np.random.default_rng(1346491)
+    random_labels = rng.integers(0, 5, sh[0] * sh[1])
     random_labels = random_labels.reshape(sh)
 
     # this label is used to set sigma_i_sq == 0 below
@@ -195,8 +195,8 @@ def test_compute_em_demons_step_3d():
     sigma_i_sq = (F - G)**2
 
     # Select some pixels to have special values
-    np.random.seed(1346491)
-    random_labels = np.random.randint(0, 5, sh[0] * sh[1] * sh[2])
+    rng = np.random.default_rng(1346491)
+    random_labels = rng.integers(0, 5, sh[0] * sh[1] * sh[2])
     random_labels = random_labels.reshape(sh)
 
     # this label is used to set sigma_i_sq == 0 below
@@ -280,7 +280,7 @@ def test_compute_em_demons_step_3d():
 
 
 def test_quantize_positive_2d():
-    np.random.seed(1246592)
+    rng = np.random.default_rng(1246592)
 
     # an arbitrary number of quantization levels
     num_levels = 11
@@ -297,7 +297,7 @@ def test_quantize_positive_2d():
                                   max_positive - delta * 0.5, num_levels - 1)
     # generate a target quantization image
     true_quantization = np.empty(img_shape, dtype=np.int32)
-    random_labels = np.random.randint(0, num_levels,
+    random_labels = rng.integers(0, num_levels,
                                       np.size(true_quantization))
 
     # make sure there is at least one element equal to 0, 1 and num_levels-1
@@ -343,7 +343,7 @@ def test_quantize_positive_2d():
 
 
 def test_quantize_positive_3d():
-    np.random.seed(1246592)
+    rng = np.random.default_rng(1246592)
 
     # an arbitrary number of quantization levels
     num_levels = 11
@@ -361,7 +361,7 @@ def test_quantize_positive_3d():
                                   num_levels - 1)
     # generate a target quantization image
     true_quantization = np.empty(img_shape, dtype=np.int32)
-    random_labels = np.random.randint(0, num_levels,
+    random_labels = rng.integers(0, num_levels,
                                       np.size(true_quantization))
 
     # make sure there is at least one element equal to 0, 1 and num_levels-1
@@ -407,13 +407,13 @@ def test_quantize_positive_3d():
 
 
 def test_compute_masked_class_stats_2d():
-    np.random.seed(1246592)
+    rng = np.random.default_rng(1246592)
 
     shape = (32, 32)
 
     # Create random labels
     labels = np.ndarray(shape, dtype=np.int32)
-    labels[...] = np.random.randint(2, 10, np.size(labels)).reshape(shape)
+    labels[...] = rng.integers(2, 10, np.size(labels)).reshape(shape)
     # now label 0 is not present and label 1 occurs once
     labels[0, 0] = 1
 
@@ -434,13 +434,13 @@ def test_compute_masked_class_stats_2d():
 
 
 def test_compute_masked_class_stats_3d():
-    np.random.seed(1246592)
+    rng = np.random.default_rng(1246592)
 
     shape = (32, 32, 32)
 
     # Create random labels
     labels = np.ndarray(shape, dtype=np.int32)
-    labels[...] = np.random.randint(2, 10, np.size(labels)).reshape(shape)
+    labels[...] = rng.integers(2, 10, np.size(labels)).reshape(shape)
 
     # now label 0 is not present and label 1 occurs once
     labels[0, 0, 0] = 1
