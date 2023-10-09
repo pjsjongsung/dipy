@@ -75,16 +75,16 @@ def xvfb_it(my_test):
     return test_with_xvfb if not is_windows else my_test
 
 
-def set_random_seed(func):
-    """Decorator to set equal seeds.
+def fix_random_number_generator(func):
+    """Decorator to use a fixed value for the random generator seed.
 
-    This will help us avoid random errors
-    that occur with low probabilitiy during testing.
+    This will make the tests that use random functions reproducible.
 
     """
-    def test_with_seed(*args, **kwargs):
-        np.random.seed(2023)
+    def wrapper_with_fixed_seed(*args, **kwargs):
+        rng = np.random.default_rng(1234)
+        kwargs['rng'] = rng
         output = func(*args, **kwargs)
         return output
 
-    return test_with_seed
+    return wrapper_with_fixed_seed

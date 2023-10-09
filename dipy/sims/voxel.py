@@ -72,7 +72,7 @@ def _add_rayleigh(sig, noise1, noise2):
     return sig + np.sqrt(noise1 ** 2 + noise2 ** 2)
 
 
-def add_noise(signal, snr, S0, noise_type='rician'):
+def add_noise(signal, snr, S0, noise_type='rician', rng=None):
     r""" Add noise of specified distribution to the signal from a single voxel.
 
     Parameters
@@ -88,6 +88,8 @@ def add_noise(signal, snr, S0, noise_type='rician'):
         The distribution of noise added. Can be either 'gaussian' for Gaussian
         distributed noise, 'rician' for Rice-distributed noise (default) or
         'rayleigh' for a Rayleigh distribution.
+    rng : numpy.random.Generator class
+        Numpy's random generator for setting seed values when needed
 
     Returns
     -------
@@ -115,6 +117,9 @@ def add_noise(signal, snr, S0, noise_type='rician'):
     """
     if snr is None:
         return signal
+    
+    if rng is None:
+        rng = np.random.default_rng()
 
     sigma = S0 / snr
 
@@ -122,12 +127,12 @@ def add_noise(signal, snr, S0, noise_type='rician'):
                    'rician': _add_rician,
                    'rayleigh': _add_rayleigh}
 
-    noise1 = np.random.normal(0, sigma, size=signal.shape)
+    noise1 = rng.normal(0, sigma, size=signal.shape)
 
     if noise_type == 'gaussian':
         noise2 = None
     else:
-        noise2 = np.random.normal(0, sigma, size=signal.shape)
+        noise2 = rng.normal(0, sigma, size=signal.shape)
 
     return noise_adder[noise_type](signal, noise1, noise2)
 
