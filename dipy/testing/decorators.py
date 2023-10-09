@@ -7,7 +7,7 @@ Decorators for dipy tests
 import re
 import os
 import platform
-
+import numpy as np
 
 SKIP_RE = re.compile("(\s*>>>.*?)(\s*)#\s*skip\s+if\s+(.*)$")
 
@@ -73,3 +73,18 @@ def xvfb_it(my_test):
     # Plant it back in and return the new function:
     test_with_xvfb.__name__ = fname
     return test_with_xvfb if not is_windows else my_test
+
+
+def set_random_seed(func):
+    """Decorator to set equal seeds.
+
+    This will help us avoid random errors
+    that occur with low probabilitiy during testing.
+
+    """
+    def test_with_seed(*args, **kwargs):
+        np.random.seed(0)
+        output = func(*args, **kwargs)
+        return output
+    
+    return test_with_seed
