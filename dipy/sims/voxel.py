@@ -117,7 +117,7 @@ def add_noise(signal, snr, S0, noise_type='rician', rng=None):
     """
     if snr is None:
         return signal
-    
+
     if rng is None:
         rng = np.random.default_rng()
 

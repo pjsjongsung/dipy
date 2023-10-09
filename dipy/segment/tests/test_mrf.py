@@ -32,6 +32,7 @@ square[99:157, 99:157, :] = 3
 # Setting seed value
 seed_v = 1234
 
+
 @fix_random_number_generator
 def create_square_uniform(rng):
     square_1 = np.zeros((256, 256, 3)) + 0.001
@@ -57,15 +58,15 @@ def create_square_gauss(rng):
                              noise_type='gaussian', rng=rng)
     square_gauss[42:213, 42:213, :] = 1
     noise_1 = rng.normal(1.001, 0.0001,
-                               size=square_gauss[42:213, 42:213, :].shape)
+                         size=square_gauss[42:213, 42:213, :].shape)
     square_gauss[42:213, 42:213, :] = square_gauss[42:213, 42:213, :] + noise_1
     square_gauss[71:185, 71:185, :] = 2
     noise_2 = rng.normal(2.001, 0.0001,
-                               size=square_gauss[71:185, 71:185, :].shape)
+                         size=square_gauss[71:185, 71:185, :].shape)
     square_gauss[71:185, 71:185, :] = square_gauss[71:185, 71:185, :] + noise_2
     square_gauss[99:157, 99:157, :] = 3
     noise_3 = rng.normal(3.001, 0.0001,
-                               size=square_gauss[99:157, 99:157, :].shape)
+                         size=square_gauss[99:157, 99:157, :].shape)
     square_gauss[99:157, 99:157, :] = square_gauss[99:157, 99:157, :] + noise_3
 
     return square_gauss
