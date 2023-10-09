@@ -83,7 +83,7 @@ def set_random_seed(func):
 
     """
     def test_with_seed(*args, **kwargs):
-        np.random.seed(0)
+        np.random.seed(2023)
         output = func(*args, **kwargs)
         return output
 
