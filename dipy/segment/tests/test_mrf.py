@@ -29,9 +29,6 @@ square[42:213, 42:213, :] = 1
 square[71:185, 71:185, :] = 2
 square[99:157, 99:157, :] = 3
 
-# Setting seed value
-seed_v = 1234
-
 
 @fix_random_number_generator
 def create_square_uniform(rng):
