@@ -142,7 +142,7 @@ def test_estimate_sigma():
 
 
 def test_pca_noise_estimate():
-    np.random.seed(1984)
+    rng = np.random.default_rng(1984)
     # MUBE:
     bvals1 = np.concatenate([np.zeros(17), np.ones(3) * 1000])
     bvecs1 = np.concatenate([np.zeros((17, 3)), np.eye(3)])
@@ -164,8 +164,8 @@ def test_pca_noise_estimate():
                             signal = signal * 100
 
                         sigma = 1
-                        noise1 = np.random.normal(0, sigma, size=signal.shape)
-                        noise2 = np.random.normal(0, sigma, size=signal.shape)
+                        noise1 = rng.normal(0, sigma, size=signal.shape)
+                        noise2 = rng.normal(0, sigma, size=signal.shape)
 
                         # Rician noise:
                         data = np.sqrt((signal + noise1) ** 2 + noise2 ** 2)

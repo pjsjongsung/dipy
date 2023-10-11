@@ -90,6 +90,7 @@ def add_noise(signal, snr, S0, noise_type='rician', rng=None):
         'rayleigh' for a Rayleigh distribution.
     rng : numpy.random.Generator class, optional
         Numpy's random generator for setting seed values when needed.
+        Default is None.
 
     Returns
     -------

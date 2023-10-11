@@ -36,7 +36,7 @@ factors = {('TRANSLATION', 2): (2.0, 0.35, np.array([2.3, 4.5])),
 
 
 def test_transform_centers_of_mass_3d():
-    np.random.seed(1246592)
+    rng = np.random.default_rng(1246592)
     shape = (64, 64, 64)
     rm = 8
     sph = vf.create_sphere(shape[0] // 2, shape[1] // 2, shape[2] // 2, rm)
@@ -301,7 +301,7 @@ def test_affreg_defaults():
 
 
 def test_mi_gradient():
-    np.random.seed(2022966)
+    rng = np.random.default_rng(2022966)
     # Test the gradient of mutual information
     h = 1e-5
     # Make sure dictionary entries are processed in the same order regardless
@@ -322,7 +322,7 @@ def test_mi_gradient():
         # Start from a small rotation
         start = regtransforms[('ROTATION', dim)]
         nrot = start.get_number_of_parameters()
-        starting_affine = start.param_to_matrix(0.25 * np.random.randn(nrot))
+        starting_affine = start.param_to_matrix(0.25 * rng.random(nrot))
         # Get data (pair of images related to each other by an known transform)
         static, moving, static_g2w, moving_g2w, smask, mmask, M = \
             setup_random_transform(transform, factor, nslices, 2.0)
@@ -414,7 +414,7 @@ def create_affine_transforms(
 
 
 def test_affine_map():
-    np.random.seed(2112927)
+    rng = np.random.default_rng(2112927)
     dom_shape = np.array([64, 64, 64], dtype=np.int32)
     cod_shape = np.array([80, 80, 80], dtype=np.int32)
     # Radius of the circle/sphere (testing image)
@@ -603,7 +603,7 @@ def test_affine_map():
     # Verify AffineMap can not be created with non-2D matrices : len(shape) != 2
     for dim_not_2 in range(10):
         if dim_not_2 != _number_dim_affine_matrix:
-            mat_large_dim = np.random.random([2]*dim_not_2)
+            mat_large_dim = rng.random([2]*dim_not_2)
             assert_raises(AffineInversionError, AffineMap, mat_large_dim)
 
 

@@ -82,13 +82,13 @@ def test_csd_xval():
             "ignore", message=descoteaux07_legacy_msg,
             category=PendingDeprecationWarning)
         sm = csd.ConstrainedSphericalDeconvModel(gtab, response)
-    np.random.seed(12345)
+    rng = np.random.default_rng(12345)
     response = ([0.0015, 0.0003, 0.0001], S0)
     with warnings.catch_warnings():
         warnings.filterwarnings(
             "ignore", message=descoteaux07_legacy_msg,
             category=PendingDeprecationWarning)
-        kf_xval = xval.kfold_xval(sm, S, 2, response, sh_order=2)
+        kf_xval = xval.kfold_xval(sm, S, 2, response, sh_order=2, rng=rng)
     # Because of the regularization, COD is not going to be perfect here:
     cod = xval.coeff_of_determination(S, kf_xval)
     # We'll just test for regressions:

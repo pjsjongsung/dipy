@@ -124,6 +124,7 @@ def orbital_phantom(gtab=None,
         Default is to not add noise at all.
     rng : numpy.random.Generator class, optional
         Numpy's random generator for setting seed values when needed.
+        Default is None.
 
     Returns
     -------

@@ -719,7 +719,7 @@ def test_compose_vector_fields_2d():
     # create a random image (with decimal digits) to warp
     moving_image = np.empty(tgt_sh, dtype=floating)
     moving_image[...] =\
-        np.random.randint(0, 10, np.size(moving_image)).reshape(tuple(tgt_sh))
+        rng.integers(0, 10, np.size(moving_image)).reshape(tuple(tgt_sh))
     # set boundary values to zero so we don't test wrong interpolation due to
     # floating point precision
     moving_image[0, :] = 0
@@ -775,7 +775,7 @@ def test_compose_vector_fields_2d():
     O = np.ones(input_shape)
     X[..., 0] = x_0[:, None] * O
     X[..., 1] = x_1[None, :] * O
-    random_labels = np.random.randint(
+    random_labels = rng.integers(
         0, 2, input_shape[0] * input_shape[1] * 2)
     random_labels = random_labels.reshape(input_shape + (2,))
     values = np.array([-1, tgt_sh[0]])
@@ -850,7 +850,7 @@ def test_compose_vector_fields_3d():
     # create a random image (with decimal digits) to warp
     moving_image = np.empty(tgt_sh, dtype=floating)
     moving_image[...] =\
-        np.random.randint(0, 10, np.size(moving_image)).reshape(tuple(tgt_sh))
+        rng.integers(0, 10, np.size(moving_image)).reshape(tuple(tgt_sh))
     # set boundary values to zero so we don't test wrong interpolation due to
     # floating point precision
     moving_image[0, :, :] = 0
@@ -912,7 +912,7 @@ def test_compose_vector_fields_3d():
     X[..., 1] = x_1[None, :, None] * O
     X[..., 2] = x_2[None, None, :] * O
     sz = input_shape[0] * input_shape[1] * input_shape[2] * 3
-    random_labels = np.random.randint(0, 2, sz)
+    random_labels = rng.integers(0, 2, sz)
     random_labels = random_labels.reshape(input_shape + (3,))
     values = np.array([-1, tgt_sh[0]])
     disp1 = (values[random_labels] - X).astype(floating)
@@ -1105,7 +1105,7 @@ def test_downsample_scalar_field_2d():
         for reduce_c in [True, False]:
             nc = size - 1 if reduce_c else size
             image = np.empty((size, size), dtype=floating)
-            image[...] = np.random.randint(0, 10, np.size(image)).reshape(sh)
+            image[...] = rng.integers(0, 10, np.size(image)).reshape(sh)
 
             if reduce_r:
                 image[-1, :] = 0
@@ -1137,7 +1137,7 @@ def test_downsample_displacement_field_2d():
         for reduce_c in [True, False]:
             nc = size - 1 if reduce_c else size
             field = np.empty((size, size, 2), dtype=floating)
-            field[...] = np.random.randint(0, 10, np.size(field)).reshape(sh)
+            field[...] = rng.integers(0, 10, np.size(field)).reshape(sh)
 
             if reduce_r:
                 field[-1, :, :] = 0
@@ -1172,7 +1172,7 @@ def test_downsample_scalar_field_3d():
                 nc = size - 1 if reduce_c else size
                 image = np.empty((size, size, size), dtype=floating)
                 image[...] =\
-                    np.random.randint(0, 10, np.size(image)).reshape(sh)
+                    rng.integers(0, 10, np.size(image)).reshape(sh)
 
                 if reduce_s:
                     image[-1, :, :] = 0
@@ -1215,7 +1215,7 @@ def test_downsample_displacement_field_3d():
                 nc = size - 1 if reduce_c else size
                 field = np.empty((size, size, size, 3), dtype=floating)
                 field[...] =\
-                    np.random.randint(0, 10, np.size(field)).reshape(sh)
+                    rng.integers(0, 10, np.size(field)).reshape(sh)
 
                 if reduce_s:
                     field[-1, :, :] = 0
@@ -1316,9 +1316,9 @@ def test_reorient_random_vector_fields():
     for n_dims, func in ((2, vfu.reorient_vector_field_2d),
                          (3, vfu.reorient_vector_field_3d)):
         size = [20, 30, 40][:n_dims] + [n_dims]
-        arr = np.random.normal(size=size)
+        arr = rng.normal(size=size)
         arr_32 = arr.astype(floating)
-        affine = from_matvec(np.random.normal(size=(n_dims, n_dims)),
+        affine = from_matvec(rng.normal(size=(n_dims, n_dims)),
                              np.zeros(n_dims))
         func(arr_32, affine)
         assert_almost_equal(arr_32, apply_affine(affine, arr), 6)

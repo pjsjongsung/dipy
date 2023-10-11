@@ -42,13 +42,13 @@ def test_exceptions():
 
 
 def test_EMMetric_image_dynamics():
-    np.random.seed(7181309)
+    rng = np.random.default_rng(7181309)
     metric = EMMetric(2)
 
     target_shape = (10, 10)
     # create a random image
     image = np.ndarray(target_shape, dtype=floating)
-    image[...] = np.random.randint(
+    image[...] = rng.integers(
         0, 10, np.size(image)).reshape(tuple(target_shape))
     # compute the expected binary mask
     expected = (image > 0).astype(np.int32)

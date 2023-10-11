@@ -241,7 +241,7 @@ def test_tracking_max_angle():
                     if cos_sim < min_cos_sim:
                         min_cos_sim = cos_sim
         return min_cos_sim
-    np.random.seed(0)  # Random number generator initialization
+    rng = np.random.default_rng(0)  # Random number generator initialization
 
     for sphere in [get_sphere('repulsion100'),
                    HemiSphere.from_sphere(get_sphere('repulsion100'))]:
@@ -249,7 +249,7 @@ def test_tracking_max_angle():
         shape_img.extend([sphere.vertices.shape[0]])
         mask = np.ones(shape_img[:3])
         affine = np.eye(4)
-        random_pmf = np.random.random(shape_img)
+        random_pmf = rng.random(shape_img)
         seeds = seeds_from_mask(mask, affine, density=1)
         sc = ActStoppingCriterion.from_pve(mask,
                                            np.zeros(shape_img[:3]),
@@ -408,8 +408,8 @@ def test_particle_filtering_tractography():
     # Random pmf in every voxel
     shape_img = list(simple_wm.shape)
     shape_img.extend([sphere.vertices.shape[0]])
-    np.random.seed(0)  # Random number generator initialization
-    pmf = np.random.random(shape_img)
+    rng = np.random.default_rng(0)  # Random number generator initialization
+    pmf = rng.random(shape_img)
 
     # Test that PFT recover equal or more streamlines than localTracking
     dg = ProbabilisticDirectionGetter.from_pmf(pmf, 60, sphere)

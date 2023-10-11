@@ -462,10 +462,10 @@ def test_bounding_bbox_valid(standard):
 
 
 def test_random_point_color():
-    np.random.seed(0)
+    rng = np.random.default_rng(0)
     sft = load_tractogram(filepath_dix['gs.tck'], filepath_dix['gs.nii'])
 
-    random_colors = np.random.randint(0, 255, (13, 8, 3))
+    random_colors = rng.integers(0, 255, (13, 8, 3))
     coloring_dict = {'colors': random_colors}
 
     try:
@@ -478,10 +478,10 @@ def test_random_point_color():
 
 
 def test_random_point_gray():
-    np.random.seed(0)
+    rng = np.random.default_rng(0)
     sft = load_tractogram(filepath_dix['gs.tck'], filepath_dix['gs.nii'])
 
-    random_colors = np.random.randint(0, 255, (13, 8, 1))
+    random_colors = rng.integers(0, 255, (13, 8, 1))
     coloring_dict = {
         'color_x': random_colors,
         'color_y': random_colors,
@@ -498,12 +498,12 @@ def test_random_point_gray():
 
 
 def test_random_streamline_color():
-    np.random.seed(0)
+    rng = np.random.default_rng(0)
     sft = load_tractogram(filepath_dix['gs.tck'], filepath_dix['gs.nii'])
 
-    uniform_colors_x = np.random.randint(0, 255, (13, 1))
-    uniform_colors_y = np.random.randint(0, 255, (13, 1))
-    uniform_colors_z = np.random.randint(0, 255, (13, 1))
+    uniform_colors_x = rng.integers(0, 255, (13, 1))
+    uniform_colors_y = rng.integers(0, 255, (13, 1))
+    uniform_colors_z = rng.integers(0, 255, (13, 1))
     uniform_colors_x = np.expand_dims(
         np.repeat(uniform_colors_x, 8, axis=1), axis=-1)
     uniform_colors_y = np.expand_dims(
