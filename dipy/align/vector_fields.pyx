@@ -2251,7 +2251,7 @@ def create_random_displacement_2d(int[:] from_shape,
 def create_random_displacement_3d(int[:] from_shape,
                                   double[:, :] from_grid2world,
                                   int[:] to_shape,
-                                  double[:, :] to_grid2world
+                                  double[:, :] to_grid2world,
                                   object rng=None):
     r"""Creates a random 3D displacement 'exactly' mapping points of two grids
 

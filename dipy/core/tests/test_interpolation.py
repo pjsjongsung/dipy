@@ -166,7 +166,7 @@ def test_interpolate_scalar_nn_3d(rng):
         npt.assert_equal(inside[i], expected_inside)
 
 
-fix_random_number_generator(9216326)
+@fix_random_number_generator(9216326)
 def test_interpolate_scalar_3d(rng):
     sz = 64
     target_shape = (sz, sz, sz)

@@ -50,7 +50,7 @@ def coeff_of_determination(data, model, axis=-1):
     return 100 * (1 - (ss_err/ss_tot))
 
 
-def kfold_xval(model, data, folds, rng=None, *model_args, **model_kwargs):
+def kfold_xval(model, data, folds, *model_args, **model_kwargs):
     """Perform k-fold cross-validation.
 
     It generate out-of-sample predictions for each measurement.
@@ -68,9 +68,6 @@ def kfold_xval(model, data, folds, rng=None, *model_args, **model_kwargs):
         b is the number of bvals/bvecs in the GradientTable.
     folds : int
         The number of divisions to apply to the data
-    rng : numpy.random.Generator class, optional
-        Numpy's random generator for setting seed values when needed.
-        Default is None.
     model_args : list
         Additional arguments to the model initialization
     model_kwargs : dict
@@ -97,8 +94,7 @@ def kfold_xval(model, data, folds, rng=None, *model_args, **model_kwargs):
        multiple b-values with cross-validation. ISMRM 2014.
 
     """
-    if rng is None:
-        rng = np.random.default_rng()
+    rng = model_kwargs.pop('rng', np.random.default_rng())
 
     # This should always be there, if the model inherits from
     # dipy.reconst.base.ReconstModel:

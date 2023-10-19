@@ -1354,7 +1354,7 @@ def sample_domain_regular(int k, int[:] shape, double[:, :] grid2world,
     if dim == 2:
         n = shape[0] * shape[1]
         m = n // k
-        samples = rng.random(m, dim) * sigma
+        samples = rng.standard_normal((m, dim)) * sigma
         with nogil:
             for i in range(m):
                 r = ((i * k) // shape[1]) + samples[i, 0]
@@ -1365,7 +1365,7 @@ def sample_domain_regular(int k, int[:] shape, double[:, :] grid2world,
         slice_size = shape[1] * shape[2]
         n = shape[0] * slice_size
         m = n // k
-        samples = rng.random(m, dim) * sigma
+        samples = rng.standard_normal((m, dim)) * sigma
         with nogil:
             for i in range(m):
                 s = ((i * k) // slice_size) + samples[i, 0]

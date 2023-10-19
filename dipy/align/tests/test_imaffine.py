@@ -322,7 +322,7 @@ def test_mi_gradient(rng):
         # Start from a small rotation
         start = regtransforms[('ROTATION', dim)]
         nrot = start.get_number_of_parameters()
-        starting_affine = start.param_to_matrix(0.25 * rng.random(nrot))
+        starting_affine = start.param_to_matrix(0.25 * rng.standard_normal(nrot))
         # Get data (pair of images related to each other by an known transform)
         static, moving, static_g2w, moving_g2w, smask, mmask, M = \
             setup_random_transform(transform, factor, nslices, 2.0)

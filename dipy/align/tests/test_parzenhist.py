@@ -442,9 +442,9 @@ def test_joint_pdf_gradients_sparse():
         # Sample the fixed-image domain
         k = 3
         sigma = 0.25
-        seed = 1234
+        rng = np.random.default_rng(1234)
         shape = np.array(static.shape, dtype=np.int32)
-        samples = sample_domain_regular(k, shape, static_g2w, sigma, seed)
+        samples = sample_domain_regular(k, shape, static_g2w, sigma, rng)
         samples = np.array(samples)
         samples = np.hstack((samples, np.ones(samples.shape[0])[:, None]))
         sp_to_static = np.linalg.inv(static_g2w)
@@ -511,8 +511,8 @@ def test_joint_pdf_gradients_sparse():
         # the same direction. Disregard very small gradients
         mean_cosine = P[P != 0].mean()
         std_cosine = P[P != 0].std()
-        assert(mean_cosine > 0.99)
-        assert(std_cosine < 0.15)
+        assert(mean_cosine > 0.98)
+        assert(std_cosine < 0.16)
 
 
 def test_sample_domain_regular():

@@ -416,7 +416,7 @@ def test_compute_masked_class_stats_2d(rng):
     labels[0, 0] = 1
 
     # Create random values
-    values = np.random.randn(shape[0], shape[1]).astype(floating)
+    values = rng.standard_normal((shape[0], shape[1])).astype(floating)
     values *= labels
     values += labels
 
@@ -443,7 +443,7 @@ def test_compute_masked_class_stats_3d(rng):
     labels[0, 0, 0] = 1
 
     # Create random values
-    values = np.random.randn(shape[0], shape[1], shape[2]).astype(floating)
+    values =  rng.standard_normal((shape[0], shape[1], shape[2])).astype(floating)
     values *= labels
     values += labels
 

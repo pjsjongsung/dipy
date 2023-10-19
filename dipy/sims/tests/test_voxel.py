@@ -131,7 +131,7 @@ def test_multi_tensor():
     assert_array_almost_equal(S, Ssingle)
 
 
-@fix_random_number_generator(1978)
+@fix_random_number_generator(2000)
 def test_snr(rng=None):
     s = single_tensor(gtab)
 

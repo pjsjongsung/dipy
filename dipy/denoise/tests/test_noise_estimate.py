@@ -142,7 +142,7 @@ def test_estimate_sigma():
                                                np.sqrt(0.4946862482541263)]))
 
 
-@fix_random_number_generator
+@fix_random_number_generator(1984)
 def test_pca_noise_estimate(rng):
     # MUBE:
     bvals1 = np.concatenate([np.zeros(17), np.ones(3) * 1000])

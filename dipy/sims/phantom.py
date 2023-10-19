@@ -8,7 +8,7 @@ from dipy.data import get_fnames
 from dipy.core.gradients import gradient_table
 
 
-def add_noise(vol, snr=1.0, S0=None, noise_type='rician'):
+def add_noise(vol, snr=1.0, S0=None, noise_type='rician', rng=None):
     """ Add noise of specified distribution to a 4D array.
 
     Parameters
@@ -24,6 +24,9 @@ def add_noise(vol, snr=1.0, S0=None, noise_type='rician'):
         The distribution of noise added. Can be either 'gaussian' for Gaussian
         distributed noise, 'rician' for Rice-distributed noise (default) or
         'rayleigh' for a Rayleigh distribution.
+    rng : numpy.random.Generator class, optional
+        Numpy's random generator for setting seed values when needed.
+        Default is None.
 
     Returns
     -------
@@ -57,7 +60,7 @@ def add_noise(vol, snr=1.0, S0=None, noise_type='rician'):
 
     for vox_idx, signal in enumerate(vol_flat):
         vol_flat[vox_idx] = vox.add_noise(signal, snr=snr, S0=S0,
-                                          noise_type=noise_type)
+                                          noise_type=noise_type, rng=rng)
 
     return np.reshape(vol_flat, orig_shape)
 
