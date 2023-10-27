@@ -50,7 +50,9 @@ def test_horizon_flow():
                        [0., 0., 1., -72.],
                        [0., 0., 0., 1.]])
 
-    data = 255 * np.random.rand(197, 233, 189)
+    rng = np.random.default_rng()
+
+    data = 255 * rng.random((197, 233, 189))
     vox_size = (1., 1., 1.)
 
     streamlines = Streamlines()
@@ -75,7 +77,7 @@ def test_horizon_flow():
             world_coords=True, interactive=False)
 
 
-    data = 255 * np.random.rand(197, 233, 189)
+    data = 255 * rng.random((197, 233, 189))
 
     images = [(data, affine)]
 
@@ -96,7 +98,7 @@ def test_horizon_flow():
         sft = StatefulTractogram(streamlines, nii_header, space=Space.RASMM)
         save_tractogram(sft, ftrk, bbox_valid_check=False)
 
-        pvalues = np.random.uniform(low=0, high=1, size=(10,))
+        pvalues = rng.uniform(low=0, high=1, size=(10,))
         np.save(fnpy, pvalues)
 
         input_files = [ftrk, fimg]

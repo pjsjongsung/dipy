@@ -87,9 +87,10 @@ def rfiw_phantom(gtab, snr=None):
     if snr is None:
         return DWI
     else:
+        rng = np.random.default_rng()
         sigma = S2 * 1.0 / snr
-        n1 = np.random.normal(0, sigma, size=DWI.shape)
-        n2 = np.random.normal(0, sigma, size=DWI.shape)
+        n1 = rng.normal(0, sigma, size=DWI.shape)
+        n2 = rng.normal(0, sigma, size=DWI.shape)
         return [np.sqrt((DWI / np.sqrt(2) + n1)**2 +
                         (DWI / np.sqrt(2) + n2)**2), sigma]
 
@@ -101,7 +102,9 @@ def test_lpca_static():
 
 
 def test_lpca_random_noise():
-    S0 = 100 + 2 * np.random.standard_normal((22, 23, 30, 20))
+    rng = np.random.default_rng()
+
+    S0 = 100 + 2 * rng.standard_normal((22, 23, 30, 20))
     S0ns = localpca(S0, sigma=np.std(S0))
 
     assert_(S0ns.min() > S0.min())
@@ -110,10 +113,12 @@ def test_lpca_random_noise():
 
 
 def test_lpca_boundary_behaviour():
+    rng = np.random.default_rng()
+
     # check is first slice is getting denoised or not ?
     S0 = 100 * np.ones((20, 20, 20, 20), dtype='f8')
     S0[:, :, 0, :] = S0[:, :, 0, :] + 2 * \
-        np.random.standard_normal((20, 20, 20))
+        rng.standard_normal((20, 20, 20))
     S0_first = S0[:, :, 0, :]
     S0ns = localpca(S0, sigma=np.std(S0))
     S0ns_first = S0ns[:, :, 0, :]
@@ -133,7 +138,9 @@ def test_lpca_boundary_behaviour():
 
 
 def test_lpca_rmse():
-    S0_w_noise = 100 + 2 * np.random.standard_normal((22, 23, 30, 20))
+    rng = np.rnadom.default_rng()
+
+    S0_w_noise = 100 + 2 * rng.standard_normal((22, 23, 30, 20))
     rmse_w_noise = np.sqrt(np.mean((S0_w_noise - 100) ** 2))
     S0_denoised = localpca(S0_w_noise, sigma=np.std(S0_w_noise))
     rmse_denoised = np.sqrt(np.mean((S0_denoised - 100) ** 2))
@@ -142,10 +149,12 @@ def test_lpca_rmse():
 
 
 def test_lpca_sharpness():
+    rng = np.random.default_rng()
+
     S0 = np.ones((30, 30, 30, 20), dtype=np.float64) * 100
     S0[10:20, 10:20, 10:20, :] = 50
     S0[20:30, 20:30, 20:30, :] = 0
-    S0 = S0 + 20 * np.random.standard_normal((30, 30, 30, 20))
+    S0 = S0 + 20 * rng.standard_normal((30, 30, 30, 20))
     S0ns = localpca(S0, sigma=20.0)
     # check the edge gradient
     edgs = np.abs(np.mean(S0ns[8, 10:20, 10:20] - S0ns[12, 10:20, 10:20]) - 50)
@@ -266,6 +275,8 @@ def test_lpca_no_gtab_no_sigma():
 
 
 def test_pca_classifier():
+    rng = np.random.default_rng()
+
     # Produce small phantom with well aligned single voxels and ground truth
     # snr = 50, i.e signal std = 0.02 (Gaussian noise)
     std_gt = 0.02
@@ -277,7 +288,7 @@ def test_pca_classifier():
                                   angles=[(0, 0, 1), (0, 0, 1)],
                                   fractions=(50, 50), snr=None)
     signal_test[..., :] = sig
-    noise = std_gt*np.random.standard_normal((5, 5, 5, ndir))
+    noise = std_gt*rng.standard_normal((5, 5, 5, ndir))
     dwi_test = signal_test + noise
 
     # Compute eigenvalues
@@ -303,9 +314,11 @@ def test_pca_classifier():
 
 
 def test_mppca_in_phantom():
+    rng = np.random.default_rng()
+
     DWIgt = rfiw_phantom(gtab, snr=None)
     std_gt = 0.02
-    noise = std_gt*np.random.standard_normal(DWIgt.shape)
+    noise = std_gt*rng.standard_normal(DWIgt.shape)
     DWInoise = DWIgt + noise
 
     # patch radius (2: #samples > #features, 1: #samples < #features)
@@ -320,9 +333,11 @@ def test_mppca_in_phantom():
 
 
 def test_mppca_returned_sigma():
+    rng = np.random.default_rng()
+
     DWIgt = rfiw_phantom(gtab, snr=None)
     std_gt = 0.02
-    noise = std_gt*np.random.standard_normal(DWIgt.shape)
+    noise = std_gt*rng.standard_normal(DWIgt.shape)
     DWInoise = DWIgt + noise
 
     # patch radius (2: #samples > #features, 1: #samples < #features)

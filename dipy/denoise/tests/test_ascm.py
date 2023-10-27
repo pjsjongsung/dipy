@@ -37,10 +37,12 @@ def test_ascm_random_noise():
 
 def test_ascm_rmse_with_nlmeans():
     # checks the smoothness
+    rng = np.random.default_rng()
+
     S0 = np.ones((30, 30, 30)) * 100
     S0[10:20, 10:20, 10:20] = 50
     S0[20:30, 20:30, 20:30] = 0
-    S0_noise = S0 + 20 * np.random.standard_normal((30, 30, 30))
+    S0_noise = S0 + 20 * rng.standard_normal((30, 30, 30))
     print("Original RMSE", np.sum(np.abs(S0 - S0_noise)) / np.sum(S0))
 
     S0n1 = non_local_means(
@@ -69,10 +71,12 @@ def test_ascm_rmse_with_nlmeans():
 
 def test_sharpness():
     # check the edge-preserving nature
+    rng = np.random.default_rng()
+
     S0 = np.ones((30, 30, 30)) * 100
     S0[10:20, 10:20, 10:20] = 50
     S0[20:30, 20:30, 20:30] = 0
-    S0_noise = S0 + 20 * np.random.standard_normal((30, 30, 30))
+    S0_noise = S0 + 20 * rng.standard_normal((30, 30, 30))
     S0n1 = non_local_means(
         S0_noise,
         sigma=400,

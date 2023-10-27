@@ -14,18 +14,20 @@ response = (np.array([1.5e3, 0.3e3, 0.3e3]), 1)
 
 
 def test_pmf_val():
+    rng = np.random.default_rng()
+
     sphere = get_sphere('symmetric724')
     with warnings.catch_warnings():
         warnings.filterwarnings(
             'ignore', message=shm.descoteaux07_legacy_msg,
             category=PendingDeprecationWarning)
-        pmfgen = SHCoeffPmfGen(np.random.random([2, 2, 2, 28]), sphere, None)
+        pmfgen = SHCoeffPmfGen(rng.random([2, 2, 2, 28]), sphere, None)
     point = np.array([1, 1, 1], dtype='float')
 
     for idx in [0, 5, 15, -1]:
         pmf = pmfgen.get_pmf(point)
         # Create a direction vector close to the vertex idx
-        xyz = sphere.vertices[idx] + np.random.random([3]) / 100
+        xyz = sphere.vertices[idx] + rng.random([3]) / 100
         pmf_idx = pmfgen.get_pmf_value(point, xyz)
         # Test that the pmf sampled for the direction xyz is correct
         npt.assert_array_almost_equal(pmf[idx], pmf_idx)

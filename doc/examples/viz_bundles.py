@@ -206,7 +206,9 @@ we can create a list of the colors to correspond to the list of streamlines
 
 scene.clear()
 
-colors = [np.random.rand(*streamline.shape) for streamline in bundle_native]
+rng = np.random.default_rng()
+
+colors = [rng.random(streamline.shape) for streamline in bundle_native]
 
 stream_actor6 = actor.line(bundle_native, colors, linewidth=0.2)
 

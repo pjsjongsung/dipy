@@ -724,8 +724,9 @@ def generate_bvecs(N, iters=5000):
         The generated directions, represented as a unit vector, of each
         gradient.
     """
-    theta = np.pi * np.random.rand(N)
-    phi = 2 * np.pi * np.random.rand(N)
+    rng = np.random.default_rng()
+    theta = np.pi * rng.random(N)
+    phi = 2 * np.pi * rng.random(N)
     hsph_initial = HemiSphere(theta=theta, phi=phi)
     hsph_updated, potential = disperse_charges(hsph_initial, iters)
     bvecs = hsph_updated.vertices

@@ -469,7 +469,7 @@ def random_seeds_from_mask(mask, affine, seeds_count=1,
         If True, seeds_count is per voxel, else seeds_count is the total number
         of seeds.
     random_seed : int
-        The seed for the random seed generator (numpy.random.seed).
+        The seed for the random seed generator (numpy.random.Generator).
 
     See Also
     --------
@@ -509,11 +509,11 @@ def random_seeds_from_mask(mask, affine, seeds_count=1,
         raise ValueError('mask cannot be more than 3d')
 
     # Randomize the voxels
-    np.random.seed(random_seed)
+    rng = np.random.default_rng(random_seed)
     shape = mask.shape
     mask = mask.flatten()
     indices = np.arange(len(mask))
-    np.random.shuffle(indices)
+    rng.shuffle(indices)
 
     where = [np.unravel_index(i, shape) for i in indices if mask[i] == 1]
     num_voxels = len(where)
@@ -532,9 +532,9 @@ def random_seeds_from_mask(mask, affine, seeds_count=1,
             if random_seed is not None:
                 s_random_seed = hash((np.sum(s) + 1) * i + random_seed) \
                     % (2**32 - 1)
-                np.random.seed(s_random_seed)
+                rng = np.random.default_rng(s_random_seed)
             # Generate random triplet
-            grid = np.random.random(3)
+            grid = rng.random(3)
             seed = s + grid - .5
             seeds.append(seed)
     seeds = np.asarray(seeds)

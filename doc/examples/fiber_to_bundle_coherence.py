@@ -51,7 +51,7 @@ from dipy.io.image import load_nifti_data, load_nifti
 from dipy.io.gradients import read_bvals_bvecs
 
 # Fix seed
-np.random.seed(1)
+rng = np.random.default_rng(1)
 
 # Read data
 hardi_fname, hardi_bval_fname, hardi_bvec_fname = get_fnames('stanford_hardi')
