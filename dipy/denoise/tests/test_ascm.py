@@ -7,6 +7,7 @@ from numpy.testing import (assert_,
 from dipy.denoise.non_local_means import non_local_means
 from dipy.denoise.noise_estimate import estimate_sigma
 from dipy.denoise.adaptive_soft_matching import adaptive_soft_matching
+from dipy.testing.decorators import set_random_number_generator
 
 
 def test_ascm_static():
@@ -19,8 +20,9 @@ def test_ascm_static():
     assert_array_almost_equal(S0, S0n)
 
 
-def test_ascm_random_noise():
-    S0 = 100 + 2 * np.random.standard_normal((22, 23, 30))
+@set_random_number_generator()
+def test_ascm_random_noise(rng=None):
+    S0 = 100 + 2 * rng.standard_normal((22, 23, 30))
     S0n1 = non_local_means(S0, sigma=1, rician=False,
                            patch_radius=1, block_radius=1)
     S0n2 = non_local_means(S0, sigma=1, rician=False,
@@ -35,10 +37,9 @@ def test_ascm_random_noise():
     assert_equal(np.round(S0n.mean()), 100)
 
 
-def test_ascm_rmse_with_nlmeans():
+@set_random_number_generator()
+def test_ascm_rmse_with_nlmeans(rng=None):
     # checks the smoothness
-    rng = np.random.default_rng()
-
     S0 = np.ones((30, 30, 30)) * 100
     S0[10:20, 10:20, 10:20] = 50
     S0[20:30, 20:30, 20:30] = 0
@@ -69,10 +70,9 @@ def test_ascm_rmse_with_nlmeans():
     assert_(90 < np.mean(S0n) < 110)
 
 
-def test_sharpness():
+@set_random_number_generator()
+def test_sharpness(rng=None):
     # check the edge-preserving nature
-    rng = np.random.default_rng()
-
     S0 = np.ones((30, 30, 30)) * 100
     S0[10:20, 10:20, 10:20] = 50
     S0[20:30, 20:30, 20:30] = 0

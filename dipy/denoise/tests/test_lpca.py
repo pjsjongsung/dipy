@@ -8,6 +8,7 @@ from numpy.testing import (assert_,
 from dipy.denoise.localpca import (localpca, mppca, genpca, _pca_classifier)
 from dipy.sims.voxel import multi_tensor
 from dipy.core.gradients import gradient_table, generate_bvecs
+from dipy.testing.decorators import set_random_number_generator
 
 
 def setup_module():
@@ -29,7 +30,7 @@ def setup_module():
     gtab = gradient_table(bvals, bvecs)
 
 
-def rfiw_phantom(gtab, snr=None):
+def rfiw_phantom(gtab, snr=None, rng=None):
     """rectangle fiber immersed in water"""
     # define voxel index
     slice_ind = np.zeros((10, 10, 8))
@@ -87,7 +88,8 @@ def rfiw_phantom(gtab, snr=None):
     if snr is None:
         return DWI
     else:
-        rng = np.random.default_rng()
+        if rng is None:
+            rng = np.random.default_rng()
         sigma = S2 * 1.0 / snr
         n1 = rng.normal(0, sigma, size=DWI.shape)
         n2 = rng.normal(0, sigma, size=DWI.shape)
@@ -101,9 +103,8 @@ def test_lpca_static():
     assert_array_almost_equal(S0, S0ns)
 
 
-def test_lpca_random_noise():
-    rng = np.random.default_rng()
-
+@set_random_number_generator()
+def test_lpca_random_noise(rng=None):
     S0 = 100 + 2 * rng.standard_normal((22, 23, 30, 20))
     S0ns = localpca(S0, sigma=np.std(S0))
 
@@ -112,9 +113,8 @@ def test_lpca_random_noise():
     assert_equal(np.round(S0ns.mean()), 100)
 
 
-def test_lpca_boundary_behaviour():
-    rng = np.random.default_rng()
-
+@set_random_number_generator()
+def test_lpca_boundary_behaviour(rng=None):
     # check is first slice is getting denoised or not ?
     S0 = 100 * np.ones((20, 20, 20, 20), dtype='f8')
     S0[:, :, 0, :] = S0[:, :, 0, :] + 2 * \
@@ -137,9 +137,8 @@ def test_lpca_boundary_behaviour():
     assert_equal(np.round(S0ns_first.mean()), 100)
 
 
-def test_lpca_rmse():
-    rng = np.rnadom.default_rng()
-
+@set_random_number_generator()
+def test_lpca_rmse(rng=None):
     S0_w_noise = 100 + 2 * rng.standard_normal((22, 23, 30, 20))
     rmse_w_noise = np.sqrt(np.mean((S0_w_noise - 100) ** 2))
     S0_denoised = localpca(S0_w_noise, sigma=np.std(S0_w_noise))
@@ -148,9 +147,8 @@ def test_lpca_rmse():
     assert_(rmse_denoised < rmse_w_noise)
 
 
-def test_lpca_sharpness():
-    rng = np.random.default_rng()
-
+@set_random_number_generator()
+def test_lpca_sharpness(rng=None):
     S0 = np.ones((30, 30, 30, 20), dtype=np.float64) * 100
     S0[10:20, 10:20, 10:20, :] = 50
     S0[20:30, 20:30, 20:30, :] = 0
@@ -192,9 +190,10 @@ def test_lpca_wrong():
     assert_raises(ValueError, localpca, S0, sigma=1)
 
 
-def test_phantom():
-    DWI_clean = rfiw_phantom(gtab, snr=None)
-    DWI, sigma = rfiw_phantom(gtab, snr=30)
+@set_random_number_generator()
+def test_phantom(rng=None):
+    DWI_clean = rfiw_phantom(gtab, snr=None, rng=rng)
+    DWI, sigma = rfiw_phantom(gtab, snr=30, rng=rng)
     # To test without Rician correction
     temp = (DWI_clean / sigma)**2
     DWI_clean_wrc = (sigma * np.sqrt(np.pi / 2) * np.exp(-0.5 * temp) *
@@ -248,35 +247,38 @@ def test_phantom():
     assert_(rmse_den_wrc < rmse_noisy_wrc)
 
 
-def test_lpca_ill_conditioned():
-    DWI, sigma = rfiw_phantom(gtab, snr=30)
+@set_random_number_generator()
+def test_lpca_ill_conditioned(rng=None):
+    DWI, sigma = rfiw_phantom(gtab, snr=30, rng=rng)
     for patch_radius in [1, [1, 1, 1]]:
         assert_warns(UserWarning, localpca, DWI, sigma,
                       patch_radius=patch_radius)
 
 
-def test_lpca_radius_wrong_shape():
-    DWI, sigma = rfiw_phantom(gtab, snr=30)
+@set_random_number_generator()
+def test_lpca_radius_wrong_shape(rng=None):
+    DWI, sigma = rfiw_phantom(gtab, snr=30, rng=rng)
     for patch_radius in [[2, 2], [2, 2, 2, 2]]:
         assert_raises(ValueError, localpca, DWI, sigma,
                       patch_radius=patch_radius)
 
 
-def test_lpca_sigma_wrong_shape():
-    DWI, sigma = rfiw_phantom(gtab, snr=30)
+@set_random_number_generator()
+def test_lpca_sigma_wrong_shape(rng=None):
+    DWI, sigma = rfiw_phantom(gtab, snr=30, rng=rng)
     # If sigma is 3D but shape is not like DWI.shape[:-1], an error is raised:
     sigma = np.zeros((DWI.shape[0], DWI.shape[1] + 1, DWI.shape[2]))
     assert_raises(ValueError, localpca, DWI, sigma)
 
 
-def test_lpca_no_gtab_no_sigma():
-    DWI, sigma = rfiw_phantom(gtab, snr=30)
+@set_random_number_generator()
+def test_lpca_no_gtab_no_sigma(rng=None):
+    DWI, sigma = rfiw_phantom(gtab, snr=30, rng=rng)
     assert_raises(ValueError, localpca, DWI, None, None)
 
 
-def test_pca_classifier():
-    rng = np.random.default_rng()
-
+@set_random_number_generator()
+def test_pca_classifier(rng=None):
     # Produce small phantom with well aligned single voxels and ground truth
     # snr = 50, i.e signal std = 0.02 (Gaussian noise)
     std_gt = 0.02
@@ -313,10 +315,9 @@ def test_pca_classifier():
     assert_(std_error < 5)
 
 
-def test_mppca_in_phantom():
-    rng = np.random.default_rng()
-
-    DWIgt = rfiw_phantom(gtab, snr=None)
+@set_random_number_generator()
+def test_mppca_in_phantom(rng=None):
+    DWIgt = rfiw_phantom(gtab, snr=None, rng=rng)
     std_gt = 0.02
     noise = std_gt*rng.standard_normal(DWIgt.shape)
     DWInoise = DWIgt + noise
@@ -332,10 +333,9 @@ def test_mppca_in_phantom():
         assert_(rmse_den < rmse_noisy)
 
 
-def test_mppca_returned_sigma():
-    rng = np.random.default_rng()
-
-    DWIgt = rfiw_phantom(gtab, snr=None)
+@set_random_number_generator()
+def test_mppca_returned_sigma(rng=None):
+    DWIgt = rfiw_phantom(gtab, snr=None, rng=rng)
     std_gt = 0.02
     noise = std_gt*rng.standard_normal(DWIgt.shape)
     DWInoise = DWIgt + noise

@@ -1,18 +1,19 @@
 import pytest
-import numpy as np
 from dipy.utils.optpkg import optional_package
+from dipy.testing.decorators import set_random_number_generator
 tf, have_tf, _ = optional_package('tensorflow')
 if have_tf:
     from dipy.nn.cnn_1d_denoising import Cnn1DDenoiser
 
 
 @pytest.mark.skipif(not have_tf, reason='Requires TensorFlow')
-def test_default_Cnn1DDenoiser_sequential():
+@set_random_number_generator()
+def test_default_Cnn1DDenoiser_sequential(rng=None):
     # Create dummy data
-    normal_img = np.random.rand(10, 10, 10, 30)
-    nos_img = normal_img + np.random.normal(loc=0.0, scale=0.1,
+    normal_img = rng.random((10, 10, 10, 30))
+    nos_img = normal_img + rng.normal(loc=0.0, scale=0.1,
                                             size=normal_img.shape)
-    x = np.random.rand(10, 10, 10, 30)
+    x = rng.random((10, 10, 10, 30))
     # Test 1D denoiser
     model = Cnn1DDenoiser(30)
     model.compile(optimizer='adam', loss='mean_squared_error',
@@ -26,12 +27,13 @@ def test_default_Cnn1DDenoiser_sequential():
 
 
 @pytest.mark.skipif(not have_tf, reason='Requires TensorFlow')
-def test_default_Cnn1DDenoiser_flow(pytestconfig):
+@set_random_number_generator()
+def test_default_Cnn1DDenoiser_flow(pytestconfig, rng):
     # Create dummy data
-    normal_img = np.random.rand(10, 10, 10, 30)
-    nos_img = normal_img + np.random.normal(loc=0.0, scale=0.1,
+    normal_img = rng.random((10, 10, 10, 30))
+    nos_img = normal_img + rng.normal(loc=0.0, scale=0.1,
                                             size=normal_img.shape)
-    x = np.random.rand(10, 10, 10, 30)
+    x = rng.random((10, 10, 10, 30))
     # Test 1D denoiser with flow API
     model = Cnn1DDenoiser(30)
     if pytestconfig.getoption('verbose') > 0:

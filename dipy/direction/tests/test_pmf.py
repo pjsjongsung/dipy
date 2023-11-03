@@ -9,13 +9,13 @@ from dipy.reconst import shm
 from dipy.direction.pmf import SimplePmfGen, SHCoeffPmfGen
 from dipy.reconst.csdeconv import ConstrainedSphericalDeconvModel
 from dipy.reconst.dti import TensorModel
+from dipy.testing.decorators import set_random_number_generator
 
 response = (np.array([1.5e3, 0.3e3, 0.3e3]), 1)
 
 
-def test_pmf_val():
-    rng = np.random.default_rng()
-
+@set_random_number_generator()
+def test_pmf_val(rng=None):
     sphere = get_sphere('symmetric724')
     with warnings.catch_warnings():
         warnings.filterwarnings(
