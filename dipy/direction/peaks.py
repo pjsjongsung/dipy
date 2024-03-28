@@ -586,7 +586,7 @@ def peaks_from_positions(positions, odfs, sphere, relative_peak_threshold=.5,
     position : array, (N, 3)
         Voxel coordinates of the N positions.
     odfs : array, (X, Y, Z, M)
-        Orientation distribution function (sphericla function) represented
+        Orientation distribution function (spherical function) represented
         on a sphere of M points.
     sphere : Sphere
         A discrete Sphere. The M points on the sphere correspond to the points
