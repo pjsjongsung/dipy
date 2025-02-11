@@ -29,7 +29,8 @@ def test_default_weights(monkeypatch):
         monkeypatch.setenv("DIPY_NN_BACKEND", backend)
         with warnings.catch_warnings():
             msg = ".*uses TensorFlow.*install PyTorch.*"
-            warnings.filterwarnings("ignore", message=msg, category=DeprecationWarning)
+            warnings.filterwarnings(
+                "ignore", message=msg, category=DeprecationWarning)
             dipy_nn = importlib.reload(sys.modules["dipy.nn"])
             evac = dipy_nn.evac
 
@@ -50,7 +51,8 @@ def test_default_weights_batch(monkeypatch):
         monkeypatch.setenv("DIPY_NN_BACKEND", backend)
         with warnings.catch_warnings():
             msg = ".*uses TensorFlow.*install PyTorch.*"
-            warnings.filterwarnings("ignore", message=msg, category=DeprecationWarning)
+            warnings.filterwarnings(
+                "ignore", message=msg, category=DeprecationWarning)
             importlib.reload(sys.modules["dipy.nn"])
             dipy_nn = importlib.reload(sys.modules["dipy.nn"])
             evac = dipy_nn.evac
@@ -59,7 +61,8 @@ def test_default_weights_batch(monkeypatch):
         fake_affine = np.array([np.eye(4), np.eye(4)])
         fake_voxsize = np.ones((2, 3))
         results_arr = evac_model.predict(
-            input_arr, fake_affine, voxsize=fake_voxsize, batch_size=2, return_prob=True
+            input_arr, fake_affine, voxsize=fake_voxsize,
+            batch_size=2, return_prob=True
         )
         npt.assert_almost_equal(results_arr, output_arr, decimal=2)
 
@@ -71,7 +74,8 @@ def test_T1_error(monkeypatch):
         monkeypatch.setenv("DIPY_NN_BACKEND", backend)
         with warnings.catch_warnings():
             msg = ".*uses TensorFlow.*install PyTorch.*"
-            warnings.filterwarnings("ignore", message=msg, category=DeprecationWarning)
+            warnings.filterwarnings(
+                "ignore", message=msg, category=DeprecationWarning)
             importlib.reload(sys.modules["dipy.nn"])
             dipy_nn = importlib.reload(sys.modules["dipy.nn"])
             evac = dipy_nn.evac
